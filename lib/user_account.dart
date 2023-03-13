@@ -28,7 +28,7 @@ class UserAccount extends StatelessWidget {
             child: Align(
               alignment: const Alignment(-0.81, 0),
               child: IconButton(
-                icon: const Icon(Icons.logout_outlined),
+                icon: const Icon(Icons.logout_outlined), //Logout icon
                 onPressed: () {
                   Navigator.push(
                     context,

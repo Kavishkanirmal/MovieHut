@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movie_hut/forum_page.dart';
 import 'package:movie_hut/login_page.dart';
 import 'package:movie_hut/navigation_drawer.dart';
 
@@ -152,13 +153,27 @@ class HomePage extends StatelessWidget {
               ),
             ),
             //Forum
-            Container(
-              height: 150,
-              width: 370,
-              margin: const EdgeInsets.only(top: 10),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Color.fromARGB(102, 254, 253, 253),
+            GestureDetector( 
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const ForumPage(), //Navigate to the forum page when widget clicked
+                  ),
+                );
+              },
+              child: Container(
+                //size of the widget
+                height: 150,
+                width: 370,
+                margin: const EdgeInsets.only(top: 10), //Margins
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ), //Make the corners curved
+                  color: Color.fromARGB(102, 254, 253, 253),
+                ),
               ),
             ),
           ],
