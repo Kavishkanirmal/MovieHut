@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:movie_hut/forum_page.dart';
 import 'package:movie_hut/login_page.dart';
 import 'package:movie_hut/navigation_drawer.dart';
+import 'package:movie_hut/poll_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -143,17 +144,35 @@ class HomePage extends StatelessWidget {
               ),
             ),
             //Poll
-            Container(
-              height: 150,
-              width: 370,
-              margin: const EdgeInsets.only(top: 10),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Color.fromARGB(102, 254, 253, 253),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const PollPage(), //Navigate to the Poll page when widget clicked
+                  ),
+                );
+              },
+              child: Container(
+                height: 150,
+                width: 370,
+                margin: const EdgeInsets.only(top: 10),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                  //Adding the cover image
+                  image: DecorationImage(
+                    image: AssetImage('assets/Poll Background.PNG'),
+                    fit: BoxFit.fill,
+                  ),
+                  //color: Color.fromARGB(102, 254, 253, 253),
+                ),
               ),
             ),
             //Forum
-            GestureDetector( 
+            GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
@@ -172,7 +191,11 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.all(
                     Radius.circular(20),
                   ), //Make the corners curved
-                  color: Color.fromARGB(102, 254, 253, 253),
+                  //Adding the cover image
+                  image: DecorationImage(
+                    image: AssetImage('assets/Forum Background.jpg'),
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),

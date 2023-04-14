@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_hut/home_page.dart';
 import 'package:movie_hut/navigation_drawer.dart';
+import 'package:movie_hut/new_thread.dart';
 import 'package:movie_hut/thread.dart';
 
 class ForumPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class ForumPage extends StatefulWidget {
 }
 
 class _ForumPageState extends State<ForumPage> {
-  int itemCount = 10; //Variable use to determine number of threads
+  int itemCount = 2; //Variable use to determine number of threads
 
   @override
   Widget build(BuildContext context) {
@@ -72,21 +73,35 @@ class _ForumPageState extends State<ForumPage> {
                 height: 40,
                 width: 120,
                 margin: const EdgeInsets.only(top: 90), //Margin of the widget
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20), //Make the corners round of the widget
-                  ),
-                  color: Color.fromARGB(122, 254, 253, 253),
-                ),
-                child: const Center(
-                  //Make the text center of the widget
-                  child: Text(
-                    'New Thread',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold, //Font weight
-                      fontSize: 16, //font size
+
+                child: ElevatedButton(
+                  onPressed: () {
+                    //Navigate to the relevant page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NewThread(),
+                      ),
+                    );
+                  },
+                  //Customize the button
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: const Color.fromARGB(175, 254, 253, 253),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ), //Text inside the widget
+                  ),
+                  child: const Center(
+                    //Make the text center of the widget
+                    child: Text(
+                      'New Thread',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, //Font weight
+                        fontSize: 16, //font size
+                      ),
+                    ), //Text inside the widget
+                  ),
                 ),
               ),
             ],
@@ -103,6 +118,7 @@ class _ForumPageState extends State<ForumPage> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
+                    //Navigate to the relevant page
                     Navigator.push(
                       context,
                       MaterialPageRoute(

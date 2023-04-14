@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_hut/search_result_page.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({super.key});
@@ -57,7 +58,15 @@ class MenuDrawer extends StatelessWidget {
               'Top Rated Movies',
               style: TextStyle(fontSize: 15),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      const SearchResultsPage(), //Navigate to the search results page when widget clicked
+                ),
+              );
+            },
           ),
           //Upcoming Movies sub title
           ListTile(
