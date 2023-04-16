@@ -262,38 +262,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
               );
             },
           ),
-
-          //Other heading
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            child: ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 0.0),
-              visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-              title: const Text(
-                'Other',
-                style: TextStyle(fontSize: 17),
-              ),
-              onTap: () {},
-            ),
-          ),
-          //line divider
-          const Divider(
-            thickness: 3,
-            indent: 14,
-            endIndent: 25,
-          ),
-          //Popular People sub title
-          ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 0.0),
-            visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-            title: const Text(
-              'Popular People',
-              style: TextStyle(fontSize: 15),
-            ),
-            onTap: () {},
-          ),
         ],
       );
 }

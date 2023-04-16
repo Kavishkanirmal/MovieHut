@@ -1,22 +1,48 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+  final _auth = FirebaseAuth.instance;
+  late String _email;
+  late String _password;
+
+  void _register() async {
+    try {
+      final newUser = await _auth.createUserWithEmailAndPassword(
+          email: _email, password: _password);
+      if (newUser != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Account Registered Successfully!")));
+        Navigator.of(context).pop();
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "weak-password") {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Weak Password!")));
+      } else if (e.code == "email-already-in-use") {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("User already exists!")));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Registraion Failed. Please try agai later!")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Registraion Failed. Please try agai later!")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //Setting the background color of the page
-      // backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      // appBar: AppBar(
-      //   //    automaticallyImplyLeading:
-      //   //        false, //Remove the default buttons from the app bar
-      //   //Changing the color of the icons
-      //   iconTheme: const IconThemeData(color: Colors.black),
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0, //Remove the shadows to make it complete transparent
-      // ),
-
       //Body of the page
       body: Stack(
         children: [
@@ -81,32 +107,43 @@ class SignupPage extends StatelessWidget {
                             const Padding(
                               padding: EdgeInsets.all(16),
                               child: TextField(
-                                  decoration: InputDecoration(
-                                hintText: "Enter your name",
-                              )),
+                                decoration: InputDecoration(
+                                  hintText: "Enter your name",
+                                ),
+                              ),
                             ),
                             //Text field for the username
-                            const Padding(
-                              padding: EdgeInsets.all(16),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
                               child: TextField(
-                                  decoration: InputDecoration(
-                                hintText: "Enter your username",
-                              )),
+                                decoration: const InputDecoration(
+                                  hintText: "Enter your username",
+                                ),
+                                onChanged: (value) {
+                                  _email = value;
+                                },
+                              ),
                             ),
                             //Text field for the password
-                            const Padding(
-                              padding: EdgeInsets.all(16),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
                               child: TextField(
-                                  decoration: InputDecoration(
-                                hintText: "Enter your password",
-                              )),
+                                decoration: const InputDecoration(
+                                  hintText: "Enter your password",
+                                ),
+                                onChanged: (value) {
+                                  _password = value;
+                                },
+                              ),
                             ),
                             //Signup button
                             const SizedBox(
                               height: 20,
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _register();
+                              },
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(30))),

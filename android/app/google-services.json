@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "675303478839",
+    "project_id": "movie-hut-b118c",
+    "storage_bucket": "movie-hut-b118c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675303478839:android:ded60d208abab76ab151b2",
+        "android_client_info": {
+          "package_name": "com.example.movie_hut"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675303478839-6n6ghdfckt9nq63ajnflgkkoh6osf59r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwwgNBNM6yUuGcaV2dqae58L7C_wtzmic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "675303478839-6n6ghdfckt9nq63ajnflgkkoh6osf59r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

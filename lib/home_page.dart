@@ -101,37 +101,11 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment:
                     MainAxisAlignment.center, //Make it center horizontally
-                children: [
-                  SizedBox(
-                    width: 370,
-                    height: 45,
-                    //Search field
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search), //Add a prefix icon
-                        hintText: "Search", //Hint text of the field
-                        filled: true, //Make the inside filled with some color
-                        fillColor: Color.fromARGB(174, 240, 219, 219),
-                        //Border of the search field
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.red,
-                          ),
-                          //Make the edges curved
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25.0),
-                          ),
-                        ),
-                      ),
-                      onChanged: (value) {},
-                    ),
-                  ),
-                ],
               ),
             ),
             Container(
               margin: const EdgeInsets.only(left: 20, right: 20, bottom: 8),
-              height: 160,
+              height: 200,
               //Main banners
               child: ListView.builder(
                 scrollDirection: Axis.horizontal, //Set scrolling direction

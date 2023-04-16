@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_hut/navigation_drawer.dart';
 
-class NewThread extends StatelessWidget {
+class NewThread extends StatefulWidget {
   const NewThread({super.key});
 
+  @override
+  State<NewThread> createState() => _NewThreadState();
+}
+
+class _NewThreadState extends State<NewThread> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

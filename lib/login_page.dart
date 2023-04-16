@@ -1,23 +1,54 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'user_account.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      //Setting the background color of the page
-      // backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      // appBar: AppBar(
-      //   //    automaticallyImplyLeading:
-      //   //        false, //Remove the default buttons from the app bar
-      //   //Changing the color of the icons
-      //   iconTheme: const IconThemeData(color: Colors.black),
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0, //Remove the shadows to make it complete transparent
-      // ),
+  State<LoginPage> createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+//Login function
+  static Future<User?> loginUsingEmailPassword(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      user = userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("No user found with this email!"),
+            duration: const Duration(seconds: 4),
+            behavior: SnackBarBehavior.floating,
+            action: SnackBarAction(
+              label: "Dismiss",
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+      }
+    }
+    return user;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //Create the textfield controllers
+    TextEditingController _emailController = TextEditingController();
+    TextEditingController _passwordController = TextEditingController();
+
+    return Scaffold(
       //Body of the page
       body: Stack(
         children: [
@@ -79,20 +110,24 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             //Text field for the username
-                            const Padding(
-                              padding: EdgeInsets.all(16),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
                               child: TextField(
-                                  decoration: InputDecoration(
-                                hintText: "Enter your username",
-                              )),
+                                controller: _emailController,
+                                decoration: const InputDecoration(
+                                  hintText: "Enter your username",
+                                ),
+                              ),
                             ),
                             //Text field for the password
-                            const Padding(
-                              padding: EdgeInsets.all(16),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
                               child: TextField(
-                                  decoration: InputDecoration(
-                                hintText: "Enter your password",
-                              )),
+                                controller: _passwordController,
+                                decoration: const InputDecoration(
+                                  hintText: "Enter your password",
+                                ),
+                              ),
                             ),
                             //Login button
                             const SizedBox(
@@ -100,13 +135,23 @@ class LoginPage extends StatelessWidget {
                             ),
                             ElevatedButton(
                               //Navigate to the UserAccount page when the button clicked
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const UserAccount(),
-                                  ),
-                                );
+                              onPressed: () async {
+                                User? user = await loginUsingEmailPassword(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                    context: context);
+                                print(user);
+                                if (user != null) {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) => UserAccount()));
+                                }
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => const UserAccount(),
+                                //   ),
+                                // );
                               },
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(

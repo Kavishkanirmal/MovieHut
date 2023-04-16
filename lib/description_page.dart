@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movie_hut/favorites_page.dart';
 import 'package:movie_hut/home_page.dart';
 import 'package:movie_hut/navigation_drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class DescriptionPage extends StatelessWidget {
+class DescriptionPage extends StatefulWidget {
   final String name, description, bannerurl, posterurl, vote, launchedDate;
-
   const DescriptionPage(
       {super.key,
       required this.name,
@@ -14,6 +15,31 @@ class DescriptionPage extends StatelessWidget {
       required this.posterurl,
       required this.vote,
       required this.launchedDate});
+
+  @override
+  State<DescriptionPage> createState() => _DescriptionPageState();
+}
+
+class _DescriptionPageState extends State<DescriptionPage> {
+  String? get name => null;
+
+  String? get description => null;
+
+  String? get bannerurl => null;
+
+  String? get vote => null;
+
+  String? get launchedDate => null;
+
+  Future<void> saveDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('name', name ?? 'default_name');
+    await prefs.setString('description', description ?? 'default_desc');
+    await prefs.setString('bannerurl', bannerurl ?? 'default_banner');
+    await prefs.setString('vote', vote ?? 'default_vote');
+    await prefs.setString('launchedDate', launchedDate ?? 'default_date');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +110,7 @@ class DescriptionPage extends StatelessWidget {
                 //Set the image
                 image: DecorationImage(
                   image: NetworkImage(
-                    bannerurl,
+                    widget.bannerurl,
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -95,7 +121,7 @@ class DescriptionPage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(top: 290, left: 290),
             child: Text(
-              " ⭐ $vote /10",
+              " ⭐ ${widget.vote} /10",
               style: const TextStyle(color: Colors.black, fontSize: 18),
             ),
           ),
@@ -103,7 +129,7 @@ class DescriptionPage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(top: 290, left: 30),
             child: Text(
-              name != null ? name : "Name Not Loaded!",
+              widget.name != null ? widget.name : "Name Not Loaded!",
               style: const TextStyle(fontSize: 20),
             ),
           ),
@@ -135,7 +161,7 @@ class DescriptionPage extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(top: 45, left: 20),
                     child: Text(
-                      "Released Date:  $launchedDate",
+                      "Released Date:  ${widget.launchedDate}",
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),
@@ -146,16 +172,32 @@ class DescriptionPage extends StatelessWidget {
                         SizedBox(
                           height: 200,
                           width: 150,
-                          child: Image.network(posterurl),
+                          child: Image.network(widget.posterurl),
                         ),
                         Flexible(
                           child: Text(
-                            description,
+                            widget.description,
                             style: const TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
                     ),
+                  ),
+                  Container(
+                    margin:
+                        const EdgeInsets.only(top: 10, left: 320, right: 10),
+                    child: IconButton(
+                        onPressed: () {
+                          saveDetails();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const FavoritePage(), //Redirect to the homepage when log out clicked
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.favorite)),
                   ),
                 ],
               ),
