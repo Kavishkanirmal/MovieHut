@@ -1,12 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movie_hut/description_page.dart';
 import 'package:movie_hut/forum_page.dart';
 import 'package:movie_hut/login_page.dart';
 import 'package:movie_hut/navigation_drawer.dart';
 import 'package:movie_hut/poll_page.dart';
+import 'package:tmdb_api/tmdb_api.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List trendingMovies = []; //List to store the trending movies
+  List topRatedMovies = []; //List to store the top rated movies
+  String apiKey = "4818980254750dc79dd7f5f5f9bff4ad"; //Store the API key
+  //Store the read access token
+  String accessToken =
+      "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ODE4OTgwMjU0NzUwZGM3OWRkN2Y1ZjVmOWJmZjRhZCIsInN1YiI6IjY0Mzk3MDU1NzY0NmZkMDBiM2ExZDZlYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.XNI4n694p5wQgvVfCMKzIKTgjxbrfQBtCiZTPVevu-w";
+
+  @override
+  void initState() {
+    loadMovies();
+    super.initState();
+  }
+
+//Function to fetch the data from the API
+  loadMovies() async {
+    TMDB tmdbWithCustomLogs = TMDB(
+      ApiKeys(apiKey, accessToken),
+      logConfig: const ConfigLogger(showLogs: true, showErrorLogs: true),
+    );
+
+    Map trendingMovieResults =
+        await tmdbWithCustomLogs.v3.trending.getTrending();
+    Map topRatedMovieResults = await tmdbWithCustomLogs.v3.movies.getTopRated();
+
+    setState(() {
+      trendingMovies =
+          trendingMovieResults['results']; //Store the details in the list
+      topRatedMovies =
+          topRatedMovieResults['results']; //Store the details in the list
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,16 +134,60 @@ class HomePage extends StatelessWidget {
               height: 160,
               //Main banners
               child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
+                scrollDirection: Axis.horizontal, //Set scrolling direction
+                itemCount:
+                    trendingMovies.length, //Get the number of items in the list
                 itemBuilder: (context, index) {
-                  return Container(
-                    height: 160,
-                    width: 370,
-                    margin: const EdgeInsets.only(right: 10),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Color.fromARGB(102, 254, 253, 253),
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DescriptionPage(
+                            name: trendingMovies[index]['title'],
+                            bannerurl: 'https://image.tmdb.org/t/p/w500' +
+                                trendingMovies[index]['backdrop_path'],
+                            posterurl: 'https://image.tmdb.org/t/p/w500' +
+                                trendingMovies[index]['poster_path'],
+                            description: trendingMovies[index]['overview'],
+                            vote: (trendingMovies[index]['vote_average']
+                                .toString()),
+                            launchedDate: trendingMovies[index]['release_date'],
+                          ), //Navigate to the Poll page when widget clicked
+                        ),
+                      );
+                    },
+                    child: Container(
+                      //Set the size of each widget
+                      height: 160,
+                      width: 370,
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
+                        //Get the poster and display
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://image.tmdb.org/t/p/w500' +
+                                  trendingMovies[index]['backdrop_path']),
+                          fit: BoxFit.fill, //Make the poster fill the widget
+                        ),
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 125),
+                        child: Center(
+                          //Display the title of the movie
+                          child: Text(
+                            trendingMovies[index]['title'] != null
+                                ? trendingMovies[index]['title']
+                                : 'Loading..',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -117,7 +200,7 @@ class HomePage extends StatelessWidget {
               child: Align(
                 alignment: Alignment(-1.55, 0),
                 child: Text(
-                  "Top picks for you",
+                  "Top Rated Movies",
                   style: TextStyle(fontSize: 22),
                 ),
               ),
@@ -129,15 +212,59 @@ class HomePage extends StatelessWidget {
               //widget row below the message
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 5,
+                itemCount:
+                    trendingMovies.length, //Get the number of items in the list
                 itemBuilder: (context, index) {
-                  return Container(
-                    height: 165,
-                    width: 135,
-                    margin: const EdgeInsets.only(right: 10),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      color: Color.fromARGB(102, 254, 253, 253),
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DescriptionPage(
+                            name: topRatedMovies[index]['title'],
+                            bannerurl: 'https://image.tmdb.org/t/p/w500' +
+                                topRatedMovies[index]['backdrop_path'],
+                            posterurl: 'https://image.tmdb.org/t/p/w500' +
+                                topRatedMovies[index]['poster_path'],
+                            description: topRatedMovies[index]['overview'],
+                            vote: (topRatedMovies[index]['vote_average']
+                                .toString()),
+                            launchedDate: topRatedMovies[index]['release_date'],
+                          ), //Navigate to the Poll page when widget clicked
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 165,
+                      width: 135,
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        //Get the poster and display
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://image.tmdb.org/t/p/w500' +
+                                  topRatedMovies[index]['poster_path']),
+                          fit: BoxFit.cover, //Make the poster fill the widget
+                        ),
+                      ),
+                      // child: Container(
+                      //   margin:
+                      //       const EdgeInsets.only(top: 125, left: 5, right: 5),
+                      //   child: Center(
+                      //     //Display the title of the movie
+                      //     child: Text(
+                      //       trendingMovies[index]['title'] != null
+                      //           ? trendingMovies[index]['title']
+                      //           : 'Loading..',
+                      //       style: const TextStyle(
+                      //         color: Colors.white,
+                      //         fontSize: 14,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ),
                   );
                 },

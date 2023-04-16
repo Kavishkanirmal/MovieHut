@@ -1,8 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:movie_hut/search_result_page.dart';
+import 'package:movie_hut/airing_today_tv_results.dart';
+import 'package:movie_hut/now_playing_movie_results.dart';
+import 'package:movie_hut/on_the_air_tv_results.dart';
+import 'package:movie_hut/popular_movie_results.dart';
+import 'package:movie_hut/popular_tv_show_results.dart';
 
-class MenuDrawer extends StatelessWidget {
+import 'package:movie_hut/top_rated_movie_results.dart';
+import 'package:movie_hut/top_rated_tv_show_results.dart';
+import 'package:movie_hut/upcoming_movie_results.dart';
+import 'package:tmdb_api/tmdb_api.dart';
+
+class MenuDrawer extends StatefulWidget {
   const MenuDrawer({super.key});
+
+  @override
+  State<MenuDrawer> createState() => _MenuDrawerState();
+}
+
+class _MenuDrawerState extends State<MenuDrawer> {
+  List trendingMovies = []; //List to store the trending movies
+  List topRatedMovies = []; //List to store the top rated movies
+  String apiKey = "4818980254750dc79dd7f5f5f9bff4ad"; //Store the API key
+  //Store the read access token
+  String accessToken =
+      "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ODE4OTgwMjU0NzUwZGM3OWRkN2Y1ZjVmOWJmZjRhZCIsInN1YiI6IjY0Mzk3MDU1NzY0NmZkMDBiM2ExZDZlYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.XNI4n694p5wQgvVfCMKzIKTgjxbrfQBtCiZTPVevu-w";
+
+  @override
+  void initState() {
+    loadMovies();
+    super.initState();
+  }
+
+//Function to fetch the data from the API
+  loadMovies() async {
+    TMDB tmdbWithCustomLogs = TMDB(
+      ApiKeys(apiKey, accessToken),
+      logConfig: const ConfigLogger(showLogs: true, showErrorLogs: true),
+    );
+
+    Map trendingMovieResults =
+        await tmdbWithCustomLogs.v3.trending.getTrending();
+    Map topRatedMovieResults = await tmdbWithCustomLogs.v3.movies.getTopRated();
+
+    setState(() {
+      trendingMovies =
+          trendingMovieResults['results']; //Store the details in the list
+      topRatedMovies =
+          topRatedMovieResults['results']; //Store the details in the list
+    });
+  }
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -16,6 +62,7 @@ class MenuDrawer extends StatelessWidget {
           ),
         ),
       );
+
   //Heading of the drawer
   Widget buildHeader(BuildContext context) => Container(
         // padding: EdgeInsets.only(
@@ -29,6 +76,7 @@ class MenuDrawer extends StatelessWidget {
           ),
         ),
       );
+
   //Items of the drawer
   Widget buildMenuItems(BuildContext context) => Column(
         children: [
@@ -62,8 +110,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      const SearchResultsPage(), //Navigate to the search results page when widget clicked
+                  builder: (context) => const TopRatedMoviesPage(),
                 ),
               );
             },
@@ -77,7 +124,14 @@ class MenuDrawer extends StatelessWidget {
               'Upcoming Movies',
               style: TextStyle(fontSize: 15),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UpcomingMoviesPage(),
+                ),
+              );
+            },
           ),
           //Now Playing Movies sub title
           ListTile(
@@ -88,7 +142,14 @@ class MenuDrawer extends StatelessWidget {
               'Now Playing Movies',
               style: TextStyle(fontSize: 15),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NowPlayingMoviesPage(),
+                ),
+              );
+            },
           ),
           //Popular Movies sub title
           ListTile(
@@ -99,7 +160,14 @@ class MenuDrawer extends StatelessWidget {
               'Popular Movies',
               style: TextStyle(fontSize: 15),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PopularMoviesPage(),
+                ),
+              );
+            },
           ),
 
           //Tv shows heading
@@ -131,7 +199,14 @@ class MenuDrawer extends StatelessWidget {
               'Popular TV Shows',
               style: TextStyle(fontSize: 15),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PopularTvPage(),
+                ),
+              );
+            },
           ),
           //Top Rated TV Shows title
           ListTile(
@@ -142,7 +217,14 @@ class MenuDrawer extends StatelessWidget {
               'Top Rated TV Shows',
               style: TextStyle(fontSize: 15),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TopRatedTvPage(),
+                ),
+              );
+            },
           ),
           //On The Air TV Shows sub title
           ListTile(
@@ -153,7 +235,14 @@ class MenuDrawer extends StatelessWidget {
               'On The Air TV Shows',
               style: TextStyle(fontSize: 15),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OnTheAirTvPage(),
+                ),
+              );
+            },
           ),
           //Airing Today sub title
           ListTile(
@@ -164,7 +253,14 @@ class MenuDrawer extends StatelessWidget {
               'Airing Today',
               style: TextStyle(fontSize: 15),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AiringTodayTvPage(),
+                ),
+              );
+            },
           ),
 
           //Other heading

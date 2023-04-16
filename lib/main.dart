@@ -7,9 +7,14 @@ void main() {
   runApp(const MovieHut());
 }
 
-class MovieHut extends StatelessWidget {
+class MovieHut extends StatefulWidget {
   const MovieHut({super.key});
 
+  @override
+  State<MovieHut> createState() => _MovieHutState();
+}
+
+class _MovieHutState extends State<MovieHut> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
